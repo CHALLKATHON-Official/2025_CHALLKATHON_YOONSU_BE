@@ -1,1 +1,1 @@
-console.log("HeartMeter 시작!");
+console.log("Lovecentage 시작!");
