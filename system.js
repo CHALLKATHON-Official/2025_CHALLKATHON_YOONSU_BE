@@ -56,18 +56,19 @@ authRouter.post('/login', (req, res) => {
   res.json({ message: '로그인 성공', username });
 });
 
-app.use('/api/auth', authRouter);
+app.use('/api/auth', authRouter); 
 
+const loveRouter = express.Router();
 
-// 오늘 날짜의 연락 정보 조회
-app.get('/loves', (req, res) => {
+// 오늘 날짜 연락 조회
+loveRouter.get('/today', (req, res) => {
   const today = new Date().toISOString().slice(0, 10);
   const loveData = loadJSON(DATA_FILE);
   res.json(loveData.filter(entry => entry.contact_date === today));
 });
 
-// 새로운 연락 데이터 추가
-app.post('/love', (req, res) => {
+// 연락 데이터 추가
+loveRouter.post('/', (req, res) => {
   const entry = req.body;
   const loveData = loadJSON(DATA_FILE);
 
@@ -80,13 +81,15 @@ app.post('/love', (req, res) => {
   res.json(entry);
 });
 
-// 특정 사용자 이름으로 연락 데이터 조회
-app.get('/love/:name', (req, res) => {
+// 특정 이름으로 연락 데이터 조회
+loveRouter.get('/:name', (req, res) => {
   const name = req.params.name;
   const loveData = loadJSON(DATA_FILE);
   res.json(loveData.filter(entry => entry.name === name));
 });
 
-app.listen(PORT, () => {
+app.use('/api/love', loveRouter); 
+
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 서버 실행 중: http://localhost:${PORT}`);
 });
